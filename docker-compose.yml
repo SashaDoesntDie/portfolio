@@ -1,0 +1,7 @@
+services:
+  portfolio:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    mem_limit: 512m
