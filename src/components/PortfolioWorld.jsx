@@ -24,10 +24,30 @@ function useKeyboard() {
   return keys
 }
 
+function useJoystick() {
+  const input = useRef({ active: false, x: 0, y: 0 })
+
+  useEffect(() => {
+    const update = (event) => {
+      input.current = {
+        active: Boolean(event.detail?.active),
+        x: THREE.MathUtils.clamp(event.detail?.x ?? 0, -1, 1),
+        y: THREE.MathUtils.clamp(event.detail?.y ?? 0, -1, 1),
+      }
+    }
+
+    window.addEventListener('portfolio:joystick', update)
+    return () => window.removeEventListener('portfolio:joystick', update)
+  }, [])
+
+  return input
+}
+
 function F1Car({ enabled, onNearbyChange, onSpeedChange }) {
   const car = useRef()
   const wheels = useRef([])
   const keys = useKeyboard()
+  const joystick = useJoystick()
   const velocity = useRef(0)
   const steer = useRef(0)
   const nearId = useRef(null)
@@ -44,23 +64,29 @@ function F1Car({ enabled, onNearbyChange, onSpeedChange }) {
     if (!car.current) return
     const dt = Math.min(delta, 0.04)
     const pressed = keys.current
-    const forward = pressed.has('KeyW') || pressed.has('ArrowUp')
-    const backward = pressed.has('KeyS') || pressed.has('ArrowDown')
+    const touch = joystick.current
+    const keyboardForward = pressed.has('KeyW') || pressed.has('ArrowUp')
+    const keyboardBackward = pressed.has('KeyS') || pressed.has('ArrowDown')
     const left = pressed.has('KeyA') || pressed.has('ArrowLeft')
     const right = pressed.has('KeyD') || pressed.has('ArrowRight')
     const boost = pressed.has('ShiftLeft') || pressed.has('ShiftRight')
     const brake = pressed.has('Space')
 
+    const forwardAmount = keyboardForward ? 1 : (touch.active ? Math.max(0, touch.y) : 0)
+    const backwardAmount = keyboardBackward ? 1 : (touch.active ? Math.max(0, -touch.y) : 0)
+    const keyboardSteer = (left ? 1 : 0) + (right ? -1 : 0)
+    const touchSteer = touch.active ? -touch.x : 0
+
     if (enabled) {
       const maxForward = boost ? 25 : 18
-      if (forward) velocity.current += 16 * dt
-      if (backward) velocity.current -= 11 * dt
-      if (!forward && !backward) velocity.current *= Math.pow(0.15, dt)
+      if (forwardAmount > 0) velocity.current += 16 * forwardAmount * dt
+      if (backwardAmount > 0) velocity.current -= 11 * backwardAmount * dt
+      if (forwardAmount === 0 && backwardAmount === 0) velocity.current *= Math.pow(0.15, dt)
       if (brake) velocity.current *= Math.pow(0.005, dt)
       velocity.current = THREE.MathUtils.clamp(velocity.current, -6, maxForward)
 
       const movingFactor = THREE.MathUtils.clamp(Math.abs(velocity.current) / 8, 0.15, 1)
-      const targetSteer = (left ? 1 : 0) + (right ? -1 : 0)
+      const targetSteer = THREE.MathUtils.clamp(keyboardSteer + touchSteer, -1, 1)
       steer.current = THREE.MathUtils.lerp(steer.current, targetSteer, 1 - Math.pow(0.001, dt))
       if (Math.abs(velocity.current) > 0.12) {
         car.current.rotation.y += steer.current * 1.55 * movingFactor * dt * Math.sign(velocity.current)
@@ -288,6 +314,11 @@ function Landmark({ item, active, onOpen }) {
     <group
       ref={group}
       position={item.position}
+      onPointerDown={(event) => {
+        event.stopPropagation()
+        const pointerId = event.pointerId ?? event.sourceEvent?.pointerId ?? event.nativeEvent?.pointerId
+        window.dispatchEvent(new CustomEvent('portfolio:landmark-pointerdown', { detail: { pointerId } }))
+      }}
       onClick={(event) => { event.stopPropagation(); onOpen(item.id) }}
       onPointerOver={() => { document.body.style.cursor = 'pointer' }}
       onPointerOut={() => { document.body.style.cursor = 'default' }}

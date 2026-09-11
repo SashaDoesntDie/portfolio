@@ -20,6 +20,9 @@ button { border: 0; }
 .app-shell { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--paper); }
 .scene-layer { position: absolute; inset: 0; }
 .scene-layer canvas { display: block; }
+@media (pointer: coarse) {
+  .scene-layer, .scene-layer canvas { touch-action: none; }
+}
 
 .topbar { position: absolute; inset: 28px 30px auto 30px; display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none; z-index: 20; }
 .brand, .menu-button { pointer-events: auto; cursor: pointer; }
@@ -111,36 +114,80 @@ kbd { display: grid; place-items: center; min-width: 21px; height: 21px; padding
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
-.mobile-controls { display: none; }
+.touch-joystick,
+.touch-drive-hint { display: none; }
 
 @media (pointer: coarse) {
-  .mobile-controls {
+  .touch-joystick {
+    position: fixed;
+    z-index: 17;
+    display: block;
+    width: 116px;
+    height: 116px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .touch-joystick-ring {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(17,17,15,.18);
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,255,255,.16) 0 30%, rgba(249,249,246,.62) 31% 100%);
+    box-shadow: 0 18px 50px rgba(17,17,15,.11), inset 0 0 0 9px rgba(255,255,255,.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .touch-joystick-axis {
     position: absolute;
     left: 50%;
-    bottom: 18px;
+    top: 50%;
+    background: rgba(17,17,15,.08);
+    transform: translate(-50%, -50%);
+  }
+  .touch-joystick-axis-x { width: 72%; height: 1px; }
+  .touch-joystick-axis-y { width: 1px; height: 72%; }
+
+  .touch-joystick-knob {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(17,17,15,.16);
+    border-radius: 50%;
+    background: rgba(17,17,15,.92);
+    box-shadow: 0 8px 22px rgba(17,17,15,.22), inset 0 0 0 5px rgba(255,255,255,.07);
+    will-change: transform;
+  }
+
+  .touch-drive-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    z-index: 13;
+    display: block;
     transform: translateX(-50%);
-    z-index: 16;
-    display: grid;
-    grid-template-columns: repeat(3, 48px);
-    grid-template-rows: repeat(2, 48px);
-    gap: 7px;
-    touch-action: none;
+    padding: 9px 12px;
+    border: 1px solid rgba(17,17,15,.1);
+    border-radius: 999px;
+    background: rgba(249,249,246,.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    white-space: nowrap;
+    pointer-events: none;
+    font: 600 8px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: .08em;
+    color: rgba(17,17,15,.55);
   }
-  .mobile-controls button {
-    border: 1px solid rgba(17,17,15,.14);
-    border-radius: 15px;
-    background: rgba(249,249,246,.82);
-    backdrop-filter: blur(18px);
-    font: 600 18px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    touch-action: none;
-  }
-  .mobile-controls button:nth-child(1) { grid-column: 2; grid-row: 1; }
-  .mobile-controls button:nth-child(2) { grid-column: 1; grid-row: 2; }
-  .mobile-controls button:nth-child(3) { grid-column: 2; grid-row: 2; }
-  .mobile-controls button:nth-child(4) { grid-column: 3; grid-row: 2; }
+
   .hud { display: none; }
   .social-rail { bottom: 18px; }
-  .proximity-prompt { bottom: 128px; }
+  .proximity-prompt { bottom: 72px; }
 }
 
 /* Rich portfolio content inside landmark detail panels */

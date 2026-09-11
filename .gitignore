@@ -1,13 +1,13 @@
 # Dependencies
 node_modules/
 
-# Build output
+# Production build
 dist/
 
-# Environment variables / secrets
+# Environment / secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Logs
 *.log
@@ -16,26 +16,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# OS files
+# Editors / OS
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
 
-# Editor / IDE files
-.vscode/
-.idea/
-
-# Temporary files
-*.tmp
-*.temp
-*.swp
-
-# Local archives / backups
+# Local deployment artifacts
 *.zip
 *.tar
 *.tar.gz
-
-# Coverage
-coverage/
-
-# Vite cache
-.vite/
+root@*

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Loader } from '@react-three/drei'
 import {
@@ -17,6 +17,127 @@ import {
 import { PortfolioWorld } from './components/PortfolioWorld.jsx'
 import { portfolio } from './data.js'
 
+
+const JOYSTICK_RADIUS = 58
+const JOYSTICK_DEADZONE = 0.12
+
+function emitJoystick(detail) {
+  window.dispatchEvent(new CustomEvent('portfolio:joystick', { detail }))
+}
+
+function getJoystickVector(originX, originY, clientX, clientY) {
+  let dx = clientX - originX
+  let dy = clientY - originY
+  const distance = Math.hypot(dx, dy)
+
+  if (distance > JOYSTICK_RADIUS) {
+    const scale = JOYSTICK_RADIUS / distance
+    dx *= scale
+    dy *= scale
+  }
+
+  let x = dx / JOYSTICK_RADIUS
+  let y = -dy / JOYSTICK_RADIUS
+
+  if (Math.abs(x) < JOYSTICK_DEADZONE) x = 0
+  if (Math.abs(y) < JOYSTICK_DEADZONE) y = 0
+
+  return { dx, dy, x, y }
+}
+
+function useTouchDrive(enabled) {
+  const pointer = useRef(null)
+  const holdTimer = useRef(null)
+  const [joystick, setJoystick] = useState(null)
+
+  const reset = useCallback(() => {
+    if (holdTimer.current) {
+      window.clearTimeout(holdTimer.current)
+      holdTimer.current = null
+    }
+
+    const wasActive = pointer.current?.active
+    pointer.current = null
+    setJoystick(null)
+
+    if (wasActive) emitJoystick({ active: false, x: 0, y: 0 })
+  }, [])
+
+  const onScenePointerDown = useCallback((event) => {
+    if (!enabled || event.pointerType !== 'touch' || pointer.current) return
+
+    const pointerId = event.pointerId
+    const originX = event.clientX
+    const originY = event.clientY
+
+    pointer.current = {
+      id: pointerId,
+      originX,
+      originY,
+      latestX: originX,
+      latestY: originY,
+      active: false,
+    }
+
+    // Delay very slightly so a Three.js landmark can claim the same touch first.
+    holdTimer.current = window.setTimeout(() => {
+      const current = pointer.current
+      if (!current || current.id !== pointerId) return
+      current.active = true
+      const vector = getJoystickVector(current.originX, current.originY, current.latestX, current.latestY)
+      setJoystick({ originX: current.originX, originY: current.originY, dx: vector.dx, dy: vector.dy })
+      emitJoystick({ active: true, x: vector.x, y: vector.y })
+    }, 55)
+  }, [enabled])
+
+  useEffect(() => {
+    const handleMove = (event) => {
+      const current = pointer.current
+      if (!current || event.pointerId !== current.id) return
+
+      current.latestX = event.clientX
+      current.latestY = event.clientY
+      if (!current.active) return
+
+      event.preventDefault()
+      const vector = getJoystickVector(current.originX, current.originY, event.clientX, event.clientY)
+      setJoystick({ originX: current.originX, originY: current.originY, dx: vector.dx, dy: vector.dy })
+      emitJoystick({ active: true, x: vector.x, y: vector.y })
+    }
+
+    const handleEnd = (event) => {
+      if (pointer.current && event.pointerId === pointer.current.id) reset()
+    }
+
+    const handleLandmarkTouch = (event) => {
+      const current = pointer.current
+      if (!current) return
+      const landmarkPointerId = event.detail?.pointerId
+      if (landmarkPointerId == null || landmarkPointerId === current.id) reset()
+    }
+
+    window.addEventListener('pointermove', handleMove, { passive: false })
+    window.addEventListener('pointerup', handleEnd)
+    window.addEventListener('pointercancel', handleEnd)
+    window.addEventListener('portfolio:landmark-pointerdown', handleLandmarkTouch)
+
+    return () => {
+      window.removeEventListener('pointermove', handleMove)
+      window.removeEventListener('pointerup', handleEnd)
+      window.removeEventListener('pointercancel', handleEnd)
+      window.removeEventListener('portfolio:landmark-pointerdown', handleLandmarkTouch)
+    }
+  }, [reset])
+
+  useEffect(() => {
+    if (!enabled) reset()
+  }, [enabled, reset])
+
+  useEffect(() => reset, [reset])
+
+  return { joystick, onScenePointerDown }
+}
+
 function App() {
   const [started, setStarted] = useState(false)
   const [activeId, setActiveId] = useState(null)
@@ -32,6 +153,8 @@ function App() {
     () => portfolio.landmarks.find((item) => item.id === nearId) ?? null,
     [nearId],
   )
+
+  const { joystick, onScenePointerDown } = useTouchDrive(started && !active && !menuOpen)
 
   const openLandmark = (id) => {
     setActiveId(id)
@@ -52,13 +175,9 @@ function App() {
     return () => window.removeEventListener('keydown', handleGlobalKey)
   }, [started, nearId, activeId])
 
-  const dispatchDriveKey = (code, down) => {
-    window.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', { code, bubbles: true }))
-  }
-
   return (
     <main className="app-shell">
-      <section className="scene-layer" aria-label="Interactive 3D portfolio map">
+      <section className="scene-layer" aria-label="Interactive 3D portfolio map" onPointerDown={onScenePointerDown}>
         <Canvas
           shadows
           dpr={[1, 1.5]}
@@ -198,38 +317,25 @@ function App() {
         </aside>
       )}
 
-      {started && !active && (
-        <div className="mobile-controls" aria-label="Touch driving controls">
-          <button
-            className="mobile-throttle"
-            onPointerDown={() => dispatchDriveKey('ArrowUp', true)}
-            onPointerUp={() => dispatchDriveKey('ArrowUp', false)}
-            onPointerCancel={() => dispatchDriveKey('ArrowUp', false)}
-            onPointerLeave={() => dispatchDriveKey('ArrowUp', false)}
-            aria-label="Accelerate"
-          >↑</button>
-          <button
-            onPointerDown={() => dispatchDriveKey('ArrowLeft', true)}
-            onPointerUp={() => dispatchDriveKey('ArrowLeft', false)}
-            onPointerCancel={() => dispatchDriveKey('ArrowLeft', false)}
-            onPointerLeave={() => dispatchDriveKey('ArrowLeft', false)}
-            aria-label="Steer left"
-          >←</button>
-          <button
-            onPointerDown={() => dispatchDriveKey('ArrowDown', true)}
-            onPointerUp={() => dispatchDriveKey('ArrowDown', false)}
-            onPointerCancel={() => dispatchDriveKey('ArrowDown', false)}
-            onPointerLeave={() => dispatchDriveKey('ArrowDown', false)}
-            aria-label="Reverse"
-          >↓</button>
-          <button
-            onPointerDown={() => dispatchDriveKey('ArrowRight', true)}
-            onPointerUp={() => dispatchDriveKey('ArrowRight', false)}
-            onPointerCancel={() => dispatchDriveKey('ArrowRight', false)}
-            onPointerLeave={() => dispatchDriveKey('ArrowRight', false)}
-            aria-label="Steer right"
-          >→</button>
+      {started && !active && joystick && (
+        <div
+          className="touch-joystick"
+          aria-hidden="true"
+          style={{ left: joystick.originX, top: joystick.originY }}
+        >
+          <div className="touch-joystick-ring">
+            <span className="touch-joystick-axis touch-joystick-axis-x" />
+            <span className="touch-joystick-axis touch-joystick-axis-y" />
+            <div
+              className="touch-joystick-knob"
+              style={{ transform: `translate(-50%, -50%) translate(${joystick.dx}px, ${joystick.dy}px)` }}
+            />
+          </div>
         </div>
+      )}
+
+      {started && !active && !menuOpen && !joystick && (
+        <div className="touch-drive-hint">TOUCH + HOLD ANYWHERE TO DRIVE</div>
       )}
 
       <footer className="social-rail">
