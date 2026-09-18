@@ -7,7 +7,7 @@ export const portfolio = {
     linkedin: 'https://www.linkedin.com/in/sasha175/',
     github: 'https://github.com/SashaDoesntDie',
     intro:
-      'MSc Computer Science & Engineering student at DTU with a strong interest in backend systems, cloud infrastructure and full-stack software development. I enjoy building practical software, learning new technologies and turning technical ideas into reliable products.',
+      'MSc Computer Science & Engineering student at DTU with a strong foundation in backend development, cloud architecture and software engineering, and growing hands-on experience in data engineering and process mining. I enjoy building practical software, analysing real-world data and learning new technologies.',
   },
   landmarks: [
     {
@@ -20,36 +20,36 @@ export const portfolio = {
       accent: '#e8ff5b',
       kind: 'orbital',
       body:
-        'I am currently studying for my MSc in Computer Science and Engineering at DTU. My main interests are Java and Python development, backend engineering, full-stack development and cloud technologies. I am early in my career and focused on building strong practical engineering skills through projects, teamwork and real-world software development.',
-      meta: ['Java', 'Python', 'Backend', 'Cloud'],
+        'I am currently studying for my MSc in Computer Science and Engineering at DTU. My main interests are Java and Python development, backend engineering, data-related development and cloud technologies. I am focused on building strong practical engineering skills through software projects, data analysis, teamwork and real-world problem solving.',
+      meta: ['Java', 'Python', 'Backend', 'Data'],
       sections: [
         {
           title: 'Engineering focus',
-          text: 'My studies and projects have given me hands-on experience with Java, Python, JavaScript, SQL, Node.js, Express.js, REST APIs, MySQL, PostgreSQL, MongoDB, Git, Docker and CI/CD workflows.',
+          text: 'My studies and projects have given me hands-on experience with Java, Python, JavaScript, SQL, Node.js, Express.js, REST APIs, MySQL, PostgreSQL, MongoDB, Git, Docker and CI/CD workflows. I have also worked with Pandas, PM4Py and Celonis in process-mining and data-analysis work.',
         },
         {
           title: 'How I work',
-          text: 'I enjoy solving problems, learning new technologies and working with others. I bring a serious approach to my work, strong willingness to learn and the adaptability to grow into unfamiliar technical areas.',
+          text: 'I enjoy solving problems, learning new technologies and working with others. In a six-person DTU project with Novo Nordisk and Celonis, I served as group leader and helped coordinate the project schedule, weekly meetings and work distribution.',
         },
         {
           title: 'What I am looking for',
-          text: 'I am looking for an entry-level software development opportunity where I can gain real-world experience, contribute to a good engineering team and grow into a strong software engineer. I am open to backend, full-stack and related development roles.',
+          text: 'I am looking for opportunities where I can gain real-world experience and continue developing as a software and data engineer. I am especially interested in work involving Python, Java, SQL, backend systems, data pipelines, testing and cloud technologies.',
         },
       ],
-      note: 'Profile content is based on my current CV and general motivation letter.',
+      note: 'Profile content is based on my current CV and motivation letter.',
     },
     {
       id: 'projects',
       index: '02',
       label: 'PROJECTS',
       title: 'Selected projects',
-      subtitle: 'Backend, full-stack and software engineering work.',
+      subtitle: 'Backend, full-stack, data and process-mining work.',
       position: [17, 0, -16],
       accent: '#ff5f1f',
       kind: 'pavilion',
       body:
-        'These projects reflect the areas I have spent the most time building and studying: backend architecture, databases, APIs, collaborative software development and software testing.',
-      meta: ['REST APIs', 'Java', 'Node.js', 'Databases'],
+        'These projects reflect the areas I have spent the most time building and studying: backend architecture, databases, APIs, collaborative software development, data analysis and process mining.',
+      meta: ['Python', 'Java', 'REST APIs', 'Celonis'],
       sections: [
         {
           title: 'Full-Stack Wikipedia Web Application',
@@ -59,7 +59,7 @@ export const portfolio = {
             'Developed the backend architecture using MVC principles for separation of concerns.',
             'Implemented JWT-based authentication and role-based authorization.',
             'Integrated MongoDB for persistent data storage and efficient querying.',
-            'Handled request validation, routing and error management.',
+            'Handled API request validation, routing and error management.',
             'Managed version control using Git.',
           ],
         },
@@ -75,44 +75,49 @@ export const portfolio = {
           ],
         },
         {
-          title: 'Bachelor Thesis',
-          kicker: 'Automated test case generation in Java',
+          title: 'Process Mining – Novo Nordisk × Celonis',
+          kicker: 'DTU group project · Python + Pandas + PM4Py + Celonis',
           bullets: [
-            'Conducted controlled experiments comparing automated test-case generation tools for Java systems.',
-            'Analyzed generated test suites using coverage and performance metrics.',
-            'Strengthened my understanding of software testing strategies, code quality and test effectiveness in backend systems.',
+            'Led a six-person DTU group project in collaboration with Novo Nordisk and Celonis, coordinating the project schedule, weekly meetings and work distribution.',
+            'Analyzed clinical-trial issue-management processes using Celonis, Python, Pandas and PM4Py to identify process deviations, rework patterns and bottlenecks.',
+            'Cleaned and transformed case and event-log data, deriving timing, sequence, resolution-time and activity-based features for process analysis.',
+            'Led the work on process discovery and bottleneck identification, comparing the actual workflow with the designed process and identifying major causes of prolonged issue resolution.',
           ],
         },
       ],
-      note: 'Project descriptions are taken from my current CV.',
+      note: 'Project descriptions are based on my current CV.',
     },
     {
       id: 'experience',
       index: '03',
       label: 'EXPERIENCE',
       title: 'Engineering experience',
-      subtitle: 'Practical work developed through projects, research and teamwork.',
+      subtitle: 'Practical work developed through projects, data analysis and teamwork.',
       position: [23, 0, 12],
       accent: '#8fd7ff',
       kind: 'monolith',
       body:
-        'I am at the beginning of my professional career, so my strongest experience currently comes from academic software projects, collaborative development and my bachelor thesis rather than a long employment history.',
-      meta: ['Teamwork', 'Backend', 'Testing', 'Git'],
+        'I am at the beginning of my professional career, so my strongest experience currently comes from academic software projects, collaborative development and a real-world process-mining project completed with Novo Nordisk and Celonis.',
+      meta: ['Leadership', 'Data Analysis', 'Backend', 'Git'],
       sections: [
         {
+          title: 'Process mining & team leadership',
+          text: 'I led a six-person DTU group project in collaboration with Novo Nordisk and Celonis, helping organise the project schedule, divide the work and coordinate weekly meetings while the team analysed clinical-trial issue-management data.',
+        },
+        {
+          title: 'Data engineering & process analysis',
+          text: 'Using Python, Pandas, PM4Py and Celonis, I worked with case and event-log data, cleaned and transformed datasets, derived process-analysis features, discovered actual workflows and helped identify rework patterns, bottlenecks and causes of prolonged issue resolution.',
+        },
+        {
           title: 'Backend & full-stack development',
-          text: 'Across my studies I have worked with software architecture, databases, authentication, APIs and application logic using Java, Node.js, Express.js and SQL/NoSQL databases.',
+          text: 'Across my studies I have worked with software architecture, databases, authentication, APIs and application logic using Java, Node.js, Express.js and SQL/NoSQL databases. I have also collaborated in a 12-person development team using Git for version control.',
         },
         {
-          title: 'Collaborative development',
-          text: 'On the Timeline Database Management System I worked as part of a 12-person team and used Git for version control while developing backend logic, database operations and validation.',
-        },
-        {
-          title: 'Software testing research',
-          text: 'My bachelor thesis focused on automated test generation for Java applications. I compared tools through controlled experiments and evaluated test suites using coverage and performance metrics.',
+          title: 'Software testing',
+          text: 'My bachelor thesis focused on automated test generation for Java applications, strengthening my understanding of software quality, test coverage and maintainable code.',
         },
       ],
-      note: 'I have intentionally described this as engineering experience rather than inventing professional roles that are not listed on my CV.',
+      note: 'This section reflects the academic and project experience described in my current CV and motivation letter.',
     },
     {
       id: 'cv',
@@ -124,8 +129,8 @@ export const portfolio = {
       accent: '#c8b6ff',
       kind: 'tower',
       body:
-        'Computer Science & Engineering MSc student at DTU with a strong foundation in backend development, cloud architecture and software engineering, with hands-on experience building software using Java, Node.js, REST APIs and databases.',
-      meta: ['DTU', 'AWS', 'Backend', 'Databases'],
+        'Computer Science & Engineering MSc student at DTU with a strong foundation in backend development, cloud architecture and software engineering, with hands-on experience building full-stack applications and working with process-mining and data-analysis tools.',
+      meta: ['DTU', 'AWS', 'Backend', 'Data'],
       sections: [
         {
           title: 'MSc · Computer Science and Engineering',
@@ -135,7 +140,7 @@ export const portfolio = {
         {
           title: 'Bachelor of Computer Science',
           kicker: 'Linnaeus University, Sweden · 2019–2025',
-          text: 'Bachelor studies in Computer Science, including a thesis on automated test-case generation tools for Java.',
+          text: 'Bachelor studies in Computer Science. My bachelor thesis focused on automated test-generation tools for Java systems.',
         },
         {
           title: 'AWS Certified Solutions Architect – Associate',
@@ -151,6 +156,10 @@ export const portfolio = {
           text: 'Node.js · Express.js · REST APIs · MVC architecture · JWT authentication',
         },
         {
+          title: 'Data & process analysis',
+          text: 'Python · Pandas · PM4Py · Celonis · event-log cleaning and transformation · process discovery · bottleneck analysis',
+        },
+        {
           title: 'Cloud & DevOps',
           text: 'AWS (EC2, S3, IAM, RDS) · Docker · CI/CD pipelines · Git',
         },
@@ -159,47 +168,51 @@ export const portfolio = {
           text: 'MySQL · PostgreSQL · MongoDB',
         },
       ],
-      note: 'For privacy, this public web version does not display my street address, phone number or private professional references.',
+      note: 'For privacy, this public web version does not display my street address, phone number or professional references.',
     },
     {
       id: 'letters',
       index: '05',
       label: 'LETTERS',
       title: 'Motivation',
-      subtitle: 'What I am looking for and why software engineering interests me.',
+      subtitle: 'Why software and data engineering interest me.',
       position: [2, 0, -27],
       accent: '#ffd77a',
       kind: 'gate',
       body:
-        'My current motivation letter is aimed at entry-level software development opportunities where I can build practical experience, contribute to a strong team and continue developing as an engineer.',
-      meta: ['Entry-level', 'Java', 'Python', 'Growth'],
+        'My current motivation letter is focused on a Data Engineering Intern opportunity at Novo Nordisk, where I can gain practical work experience and further develop my skills in software and data engineering.',
+      meta: ['Data Engineering', 'Python', 'SQL', 'Cloud'],
       sections: [
         {
-          title: 'Areas I want to work in',
-          text: 'My strongest interests are Java and Python development, backend engineering and full-stack development. I am also interested in cloud technologies and the engineering practices around reliable software delivery.',
+          title: 'Why data engineering',
+          text: 'My main interests are Java and Python development, backend systems and data-related development. I am especially interested in opportunities where software engineering and real-world data come together.',
+        },
+        {
+          title: 'Relevant project experience',
+          text: 'At DTU I worked on a Process Mining project in collaboration with Novo Nordisk and Celonis. Our six-person team used Python, Pandas, PM4Py and Celonis to clean and analyse clinical-trial issue-management data and identify process bottlenecks, rework and data-quality issues. I served as the group leader.',
         },
         {
           title: 'What I bring',
-          text: 'A strong willingness to learn, adaptability, a serious approach to my work and genuine interest in becoming a better developer. I enjoy solving problems, learning new technologies and working with others.',
+          text: 'I bring a strong willingness to learn, good adaptability, a serious approach to my work and a genuine interest in becoming a better developer and engineer. I have experience with Java, Python, SQL, backend development, databases, Git, Docker and CI/CD workflows, together with an AWS cloud certification.',
         },
         {
-          title: 'My goal',
-          text: 'I want to join a good team and company, gain real-world experience and grow into a strong software engineer. I am open to different development roles and willing to relocate for the right opportunity.',
+          title: 'What I want to develop further',
+          text: 'I want to gain hands-on experience with Python, SQL, data pipelines, testing and cloud technologies while contributing to a professional engineering team and continuing to grow.',
         },
       ],
-      note: 'This section summarizes my general motivation letter dated August 2026 rather than reproducing it as a generic application letter.',
+      note: 'This section summarizes my current motivation letter for the Novo Nordisk Data Engineering Intern position.',
     },
     {
       id: 'contact',
       index: '06',
       label: 'CONTACT',
       title: 'Start a conversation',
-      subtitle: 'Open to entry-level software development opportunities.',
+      subtitle: 'Open to software and data engineering opportunities.',
       position: [0, 0, 25],
       accent: '#90f0c2',
       kind: 'beacon',
       body:
-        'I am currently based in Copenhagen, Denmark and studying at DTU. I am open to software development opportunities and would be happy to discuss backend, full-stack, Java, Python or cloud-focused roles.',
+        'I am currently based in Copenhagen, Denmark and studying at DTU. I am interested in software and data engineering opportunities involving backend development, Java, Python, SQL, data analysis or cloud technologies.',
       meta: ['Copenhagen', 'Email', 'LinkedIn', 'GitHub'],
       sections: [
         {
@@ -212,7 +225,7 @@ export const portfolio = {
         },
         {
           title: 'Location',
-          text: 'Copenhagen, Denmark · Open to relocation for the right opportunity.',
+          text: 'Copenhagen, Denmark',
         },
       ],
       actions: [
